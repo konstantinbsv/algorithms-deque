@@ -66,6 +66,22 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     private void doubleCapacity() {
+        assert capacity >= top;
+
+        int elementsInDeque = size();
+        int centerOfDequeElements = (elementsInDeque)/2;
+
+        capacity *= 2;
+        Object[] newDeque = new Object[capacity];
+        int newDequeCenter = capacity/2;
+
+        for (int i = bottom; i < top; i++) {
+            newDeque[newDequeCenter - centerOfDequeElements + (i-bottom)] = deque[i];
+        }
+
+        bottom = newDequeCenter - centerOfDequeElements;
+        top    = newDequeCenter - centerOfDequeElements + elementsInDeque;
+        deque = newDeque;
     }
 
     // return an iterator over items in order from front to back
