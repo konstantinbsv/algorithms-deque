@@ -86,7 +86,32 @@ public class Deque<Item> implements Iterable<Item> {
 
     // return an iterator over items in order from front to back
     public Iterator<Item> iterator() {
+        return new DequeIterator();
+    }
 
+    private class DequeIterator implements Iterator {
+        private int i;
+
+        private DequeIterator() {
+            i = bottom;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return i < top;
+        }
+
+        @Override
+        public Object next() {
+            if (!hasNext()) throw new NoSuchElementException();
+
+            return deque[i++];
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
 
     }
 
