@@ -117,7 +117,38 @@ public class Deque<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
+        Deque<Integer> dequeUnderTest = new Deque<>();
+        assert dequeUnderTest.isEmpty();
 
+        System.out.println("dequeUnderTest.isEmpty() = " + dequeUnderTest.isEmpty());
+        System.out.println("dequeUnderTest.size() = " + dequeUnderTest.size());
+
+        for (int i = 1; i <= 400; i += 1) {
+            if (i%2 == 0) {
+                dequeUnderTest.addFirst(i);
+            } else {
+                dequeUnderTest.addLast(i);
+            }
+        }
+
+        for (Integer i: dequeUnderTest) {
+            System.out.println("i = " + i);
+        }
+
+        System.out.println("dequeUnderTest.size() = " + dequeUnderTest.size());
+        System.out.println("dequeUnderTest.removeFirst() = " + dequeUnderTest.removeFirst());
+        System.out.println("dequeUnderTest.removeLast() = " + dequeUnderTest.removeLast());
+        System.out.println("dequeUnderTest.isEmpty() = " + dequeUnderTest.isEmpty());
+        System.out.println("dequeUnderTest.size() = " + dequeUnderTest.size());
+
+        System.out.println("---Removing items---");
+        for (Integer i: dequeUnderTest) {
+            dequeUnderTest.removeLast();
+        }
+
+        System.out.println("dequeUnderTest.isEmpty() = " + dequeUnderTest.isEmpty());
+        System.out.println("dequeUnderTest.size() = " + dequeUnderTest.size());
+    }
 
 }
 
