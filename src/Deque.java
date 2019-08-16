@@ -89,7 +89,7 @@ public class Deque<Item> implements Iterable<Item> {
         return new DequeIterator();
     }
 
-    private class DequeIterator implements Iterator {
+    private class DequeIterator implements Iterator<Item> {
         private int i;
 
         private DequeIterator() {
@@ -102,10 +102,10 @@ public class Deque<Item> implements Iterable<Item> {
         }
 
         @Override
-        public Object next() {
+        public Item next() {
             if (!hasNext()) throw new NoSuchElementException();
 
-            return deque[i++];
+            return (Item) deque[i++];
         }
 
         @Override

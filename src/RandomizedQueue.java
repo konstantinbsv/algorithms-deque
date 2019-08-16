@@ -77,7 +77,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return new RandomQueIterator();
     }
 
-    private class RandomQueIterator implements Iterator {
+    private class RandomQueIterator implements Iterator<Item> {
         private int i = 0;
 
         private RandomQueIterator() {
@@ -90,10 +90,10 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
 
         @Override
-        public Object next() {
+        public Item next() {
             if (!hasNext()) throw new NoSuchElementException();
 
-            return queue[i++];
+            return (Item) queue[i++];
         }
 
         @Override
