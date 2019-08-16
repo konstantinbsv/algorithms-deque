@@ -78,6 +78,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     private class RandomQueIterator implements Iterator {
+        private int i = 0;
 
         private RandomQueIterator() {
             StdRandom.shuffle(queue, 0, last);
@@ -85,14 +86,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
         @Override
         public boolean hasNext() {
-            return !isEmpty();
+            return i < last;
         }
 
         @Override
         public Object next() {
             if (!hasNext()) throw new NoSuchElementException();
 
-            return sample();
+            return queue[i++];
         }
 
         @Override
