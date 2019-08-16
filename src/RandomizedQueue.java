@@ -58,7 +58,18 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     private void doubleCapacity() {
+        assert capacity >= last;
 
+        int elementsInQueue = size();
+        capacity *= 2;
+        Object[] newQueue = new Object[capacity];
+        for (int i = first; i < last; i++) {
+            newQueue[i- first] = queue[i];
+        }
+
+        first = 0;
+        last = first + elementsInQueue;
+        queue = newQueue;
     }
 
     // return an independent iterator over items in random order
