@@ -3,6 +3,9 @@ import java.util.NoSuchElementException;
 
 public class Deque<Item> implements Iterable<Item> {
     private static final int INITIAL_CAPACITY = 16;
+    private static final double CAPACITY_MULT_FACTOR_ON_FULL = 2; // array will be doubled when full
+    private static final double CAPACITY_MULT_FACTOR_ON_EMPTY = 0.5; // array will be halved when empty enough
+    private static final double MIN_EMPTY_TO_CAP_RATIO = 0.25; // capacity will be reduced when array is 25% empty
 
     private int first = INITIAL_CAPACITY/2;
     private int last = INITIAL_CAPACITY/2;
@@ -28,7 +31,7 @@ public class Deque<Item> implements Iterable<Item> {
     // add the item to the front
     public void addFirst(Item item) {
         if (item == null) throw new IllegalArgumentException();
-        if (first == 0) doubleCapacity();
+        if (first == 0) changeCapacity(CAPACITY_MULT_FACTOR_ON_FULL);
 
         first--;
         deque[first] = item;
@@ -37,7 +40,7 @@ public class Deque<Item> implements Iterable<Item> {
     // add the item to the back
     public void addLast(Item item) {
         if (item == null) throw new IllegalArgumentException();
-        if (last == capacity) doubleCapacity();
+        if (last == capacity) changeCapacity(CAPACITY_MULT_FACTOR_ON_FULL);
 
         deque[last] = item;
         last++;
@@ -51,6 +54,9 @@ public class Deque<Item> implements Iterable<Item> {
         firstItem = (Item) deque[first];
         deque[first] = null;
         first++;
+        // check if array is too empty
+        if (size() <= MIN_EMPTY_TO_CAP_RATIO) changeCapacity(CAPACITY_MULT_FACTOR_ON_EMPTY);
+
         return firstItem;
     }
 
@@ -62,25 +68,28 @@ public class Deque<Item> implements Iterable<Item> {
         last--; // move back one spot to first item
         lastItem = (Item) deque[last]; // get first item
         deque[last] = null; // prevent loitering
+        // check if array is too empty
+        if (size() <= MIN_EMPTY_TO_CAP_RATIO) changeCapacity(CAPACITY_MULT_FACTOR_ON_EMPTY);
+
         return lastItem;
     }
 
-    private void doubleCapacity() {
+    private void changeCapacity(double multiplicationFactor) {
         assert capacity >= last;
 
         int elementsInDeque = size();
         int centerOfDequeElements = (elementsInDeque)/2;
 
-        capacity *= 2;
+        capacity *= multiplicationFactor;
         Object[] newDeque = new Object[capacity];
         int newDequeCenter = capacity/2;
 
         for (int i = first; i < last; i++) {
-            newDeque[newDequeCenter - centerOfDequeElements + (i- first)] = deque[i];
+            newDeque[Math.abs(newDequeCenter - centerOfDequeElements) + (i- first)] = deque[i];
         }
 
-        first = newDequeCenter - centerOfDequeElements;
-        last = newDequeCenter - centerOfDequeElements + elementsInDeque;
+        first = Math.abs(newDequeCenter - centerOfDequeElements);
+        last = Math.abs(newDequeCenter - centerOfDequeElements) + elementsInDeque;
         deque = newDeque;
     }
 
