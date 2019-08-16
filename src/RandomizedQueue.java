@@ -103,7 +103,31 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
+        RandomizedQueue<Integer> queueUnderTest = new RandomizedQueue<>();
 
+        System.out.println("queueUnderTest.isEmpty() = " + queueUnderTest.isEmpty());
+        System.out.println("queueUnderTest.size() = " + queueUnderTest.size());
+
+        System.out.println("---Filling queue---");
+        for (int i = 1; i <= 50; i++) {
+            queueUnderTest.enqueue(i);
+        }
+        System.out.println("Random samples");
+        System.out.println("queueUnderTest.sample() = " + queueUnderTest.sample());
+        System.out.println("queueUnderTest.sample() = " + queueUnderTest.sample());
+
+        for (Integer i: queueUnderTest) {
+            System.out.println("i = " + i);
+        }
+        System.out.println("queueUnderTest.isEmpty() = " + queueUnderTest.isEmpty());
+        System.out.println("queueUnderTest.size() = " + queueUnderTest.size());
+
+        System.out.println("---Dequeue-ing---");
+        for (int i = 0; i < 50; i++) {
+            System.out.println("dequeue = " + queueUnderTest.dequeue());
+        }
+        System.out.println("queueUnderTest.isEmpty() = " + queueUnderTest.isEmpty());
+        System.out.println("queueUnderTest.size() = " + queueUnderTest.size());
     }
 
 }
