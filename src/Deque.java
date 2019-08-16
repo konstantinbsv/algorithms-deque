@@ -4,8 +4,8 @@ import java.util.NoSuchElementException;
 public class Deque<Item> implements Iterable<Item> {
     private static final int INITIAL_CAPACITY = 16;
 
-    private int top = INITIAL_CAPACITY/2;
-    private int bottom = INITIAL_CAPACITY/2;
+    private int last = INITIAL_CAPACITY/2;
+    private int first = INITIAL_CAPACITY/2;
     private int capacity = INITIAL_CAPACITY;
 
     private Object[] deque;
@@ -17,30 +17,30 @@ public class Deque<Item> implements Iterable<Item> {
 
     // is the deque empty?
     public boolean isEmpty() {
-        return top == bottom;
+        return last == first;
     }
 
     // return the number of items on the deque
     public int size() {
-        return top - bottom;
+        return last - first;
     }
 
     // add the item to the front
     public void addFirst(Item item) {
         if (item == null) throw new IllegalArgumentException();
-        if (top == capacity) doubleCapacity();
+        if (last == capacity) doubleCapacity();
 
-        deque[top] = item;
-        top++;
+        deque[last] = item;
+        last++;
     }
 
     // add the item to the back
     public void addLast(Item item) {
         if (item == null) throw new IllegalArgumentException();
-        if (bottom == 0) doubleCapacity();
+        if (first == 0) doubleCapacity();
 
-        bottom--;
-        deque[bottom] = item;
+        first--;
+        deque[first] = item;
     }
 
     // remove and return the item from the front
@@ -48,9 +48,9 @@ public class Deque<Item> implements Iterable<Item> {
         if (isEmpty()) throw new NoSuchElementException();
 
         Item firstItem;
-        top--; // move back one spot to first item
-        firstItem = (Item) deque[top]; // get first item
-        deque[top] = null; // prevent loitering
+        last--; // move back one spot to first item
+        firstItem = (Item) deque[last]; // get first item
+        deque[last] = null; // prevent loitering
         return firstItem;
     }
 
@@ -59,14 +59,14 @@ public class Deque<Item> implements Iterable<Item> {
         if (isEmpty()) throw new NoSuchElementException();
 
         Item lastItem;
-        lastItem = (Item) deque[bottom];
-        deque[bottom] = null;
-        bottom++;
+        lastItem = (Item) deque[first];
+        deque[first] = null;
+        first++;
         return lastItem;
     }
 
     private void doubleCapacity() {
-        assert capacity >= top;
+        assert capacity >= last;
 
         int elementsInDeque = size();
         int centerOfDequeElements = (elementsInDeque)/2;
@@ -75,12 +75,12 @@ public class Deque<Item> implements Iterable<Item> {
         Object[] newDeque = new Object[capacity];
         int newDequeCenter = capacity/2;
 
-        for (int i = bottom; i < top; i++) {
-            newDeque[newDequeCenter - centerOfDequeElements + (i-bottom)] = deque[i];
+        for (int i = first; i < last; i++) {
+            newDeque[newDequeCenter - centerOfDequeElements + (i- first)] = deque[i];
         }
 
-        bottom = newDequeCenter - centerOfDequeElements;
-        top    = newDequeCenter - centerOfDequeElements + elementsInDeque;
+        first = newDequeCenter - centerOfDequeElements;
+        last = newDequeCenter - centerOfDequeElements + elementsInDeque;
         deque = newDeque;
     }
 
@@ -93,12 +93,12 @@ public class Deque<Item> implements Iterable<Item> {
         private int i;
 
         private DequeIterator() {
-            i = bottom;
+            i = first;
         }
 
         @Override
         public boolean hasNext() {
-            return i < top;
+            return i < last;
         }
 
         @Override
@@ -124,7 +124,7 @@ public class Deque<Item> implements Iterable<Item> {
         System.out.println("dequeUnderTest.size() = " + dequeUnderTest.size());
 
         for (int i = 1; i <= 400; i += 1) {
-            if (i%2 == 0) {
+            if (i % 2 == 0) {
                 dequeUnderTest.addFirst(i);
             } else {
                 dequeUnderTest.addLast(i);
