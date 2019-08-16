@@ -74,7 +74,32 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // return an independent iterator over items in random order
     public Iterator<Item> iterator() {
+        return new RandomQueIterator();
+    }
 
+    private class RandomQueIterator implements Iterator {
+
+        private RandomQueIterator() {
+            StdRandom.shuffle(queue, 0, last);
+        }
+
+        @Override
+        public boolean hasNext() {
+            return !isEmpty();
+        }
+
+        @Override
+        public Object next() {
+            if (!hasNext()) throw new NoSuchElementException();
+
+            return sample();
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
 
     // unit testing (required)
     public static void main(String[] args) {
